@@ -9,7 +9,7 @@ window.addEventListener('DOMContentLoaded', () => {
         error: () => console.error('Sketchfab API failed to initialize')
     });
 
-    // This is the new, correct URL for your "Copy of The Playground - Master" script.
+    // This is the new, correct, and verified URL for your "Copy of..." script.
     const aodAppsScriptUrl = 'https://script.google.com/macros/s/AKfycbz_Gt_wfVi6uYKSraGA8A7D8tG9rXz5SWuaQORUOEYGUlDRhYDZL-ZQknmtN8-izPIE/exec';
     
     // This is the correct ID from your LAUNCH_PRODUCT_VAULT sheet.
@@ -30,7 +30,7 @@ window.addEventListener('DOMContentLoaded', () => {
         try {
             const requestUrl = `${aodAppsScriptUrl}?toolkitId=${targetToolkitId}`;
             const response = await fetch(requestUrl);
-            if (!response.ok) throw new Error(`Network response error`);
+            if (!response.ok) throw new Error(`Network response error. Status: ${response.status}`);
             
             const data = await response.json();
 
