@@ -5,13 +5,18 @@ window.addEventListener('DOMContentLoaded', () => {
     let sketchfabApi;
 
     client.init(modelUID, {
-        success: (api) => { api.start(); },
+        success: (api) => {
+            sketchfabApi = api;
+            api.start();
+            api.addEventListener('viewerready', () => console.log('Sketchfab Viewer is ready.'));
+        },
         error: () => console.error('Sketchfab API failed to initialize')
     });
 
-    const aodAppsScriptUrl = 'https://script.google.com/macros/s/AKfycbzNZy03Jizd-BsXO29OwnBT7UrXyza4URqNKSjl2oQcwXjFW8fynRQ7dWPixhGoQuPZ/exec';
+    // This is the new, correct URL for your V.02 spreadsheet script.
+    const aodAppsScriptUrl = 'https://script.google.com/macros/s/AKfycbxbaAPZ5yyGXyogUhn8OuIejDZFz-bNnQ0oqMsy4ukGXt6FffWYzpKcqXwAMLYRyKWp/exec';
     
-    // We are going back to asking for the ID that we know is in the Assembly Map
+    // This is the correct ID from your LAUNCH_PRODUCT_VAULT sheet.
     const targetToolkitId = 'BP-C5.1';
 
     const quizContainer = document.getElementById('quiz-container');
@@ -23,37 +28,40 @@ window.addEventListener('DOMContentLoaded', () => {
     quizContainer.appendChild(loadButton);
 
     async function handleLoadToolkitClick() {
-        outputContainer.innerHTML = '<p>Loading toolkit...</p>';
+        console.log(`Button clicked. Fetching data for: ${targetToolkitId}`);
+        outputContainer.innerHTML = '<p>Loading toolkit... Please wait.</p>';
         loadButton.disabled = true;
 
         try {
             const requestUrl = `${aodAppsScriptUrl}?toolkitId=${targetToolkitId}`;
             const response = await fetch(requestUrl);
-            if (!response.ok) throw new Error(`Network response error`);
+            if (!response.ok) throw new Error(`Network response was not ok: ${response.statusText}`);
             
             const data = await response.json();
 
             if (data.status === 'success') {
                 outputContainer.innerHTML = ''; 
-                data.bricks.forEach(brick => {
-                    const brickElement = document.createElement('div');
-                    const brickTitle = document.createElement('h3');
-                    brickTitle.textContent = brick.id;
-                    const brickText = document.createElement('p');
-                    brickText.textContent = brick.text;
-                    brickElement.appendChild(brickTitle);
-                    brickElement.appendChild(brickText);
-                    outputContainer.appendChild(brickElement);
-                });
+
+                const finishedToolkit = data.bricks[0]; 
+                
+                const toolkitText = document.createElement('pre');
+                toolkitText.style.whiteSpace = 'pre-wrap';
+                toolkitText.style.fontFamily = 'inherit';
+                toolkitText.textContent = finishedToolkit.text;
+                
+                outputContainer.appendChild(toolkitText);
+
             } else {
-                // This is where the "Toolkit ID 'C5.B.1' not found" error comes from
-                throw new Error(data.message);
+                throw new Error(data.message || 'The Apps Script returned an error.');
             }
+
         } catch (error) {
-            outputContainer.innerHTML = `<p style="color: red;"><strong>Error fetching toolkit:</strong> — ${error.message}</p>`;
+            console.error('Error fetching toolkit:', error);
+            outputContainer.innerHTML = `<p style="color: red;"><strong>Error:</strong> Could not load the toolkit. Please check the console for details.</p>`;
         } finally {
             loadButton.disabled = false;
         }
     }
+
     loadButton.addEventListener('click', handleLoadToolkitClick);
 });
