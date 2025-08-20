@@ -5,11 +5,7 @@ window.addEventListener('DOMContentLoaded', () => {
     let sketchfabApi;
 
     client.init(modelUID, {
-        success: (api) => {
-            sketchfabApi = api;
-            api.start();
-            api.addEventListener('viewerready', () => console.log('Sketchfab Viewer is ready.'));
-        },
+        success: (api) => { api.start(); },
         error: () => console.error('Sketchfab API failed to initialize')
     });
 
@@ -28,40 +24,32 @@ window.addEventListener('DOMContentLoaded', () => {
     quizContainer.appendChild(loadButton);
 
     async function handleLoadToolkitClick() {
-        console.log(`Button clicked. Fetching data for: ${targetToolkitId}`);
         outputContainer.innerHTML = '<p>Loading toolkit... Please wait.</p>';
         loadButton.disabled = true;
 
         try {
             const requestUrl = `${aodAppsScriptUrl}?toolkitId=${targetToolkitId}`;
             const response = await fetch(requestUrl);
-            if (!response.ok) throw new Error(`Network response was not ok: ${response.statusText}`);
+            if (!response.ok) throw new Error(`Network response error`);
             
             const data = await response.json();
 
             if (data.status === 'success') {
                 outputContainer.innerHTML = ''; 
-
                 const finishedToolkit = data.bricks[0]; 
-                
                 const toolkitText = document.createElement('pre');
                 toolkitText.style.whiteSpace = 'pre-wrap';
                 toolkitText.style.fontFamily = 'inherit';
                 toolkitText.textContent = finishedToolkit.text;
-                
                 outputContainer.appendChild(toolkitText);
-
             } else {
-                throw new Error(data.message || 'The Apps Script returned an error.');
+                throw new Error(data.message);
             }
-
         } catch (error) {
-            console.error('Error fetching toolkit:', error);
-            outputContainer.innerHTML = `<p style="color: red;"><strong>Error:</strong> Could not load the toolkit. Please check the console for details.</p>`;
+            outputContainer.innerHTML = `<p style="color: red;"><strong>Error fetching toolkit:</strong> — ${error.message}</p>`;
         } finally {
             loadButton.disabled = false;
         }
     }
-
     loadButton.addEventListener('click', handleLoadToolkitClick);
 });
