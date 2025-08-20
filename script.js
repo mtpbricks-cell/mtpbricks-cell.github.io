@@ -9,8 +9,8 @@ window.addEventListener('DOMContentLoaded', () => {
         error: () => console.error('Sketchfab API failed to initialize')
     });
 
-    // This is the new, correct URL for your V.02 spreadsheet script.
-    const aodAppsScriptUrl = 'https://script.google.com/macros/s/AKfycbxbaAPZ5yyGXyogUhn8OuIejDZFz-bNnQ0oqMsy4ukGXt6FffWYzpKcqXwAMLYRyKWp/exec';
+    // This is the new, correct URL for your "Copy of The Playground - Master" script.
+    const aodAppsScriptUrl = 'https://script.google.com/macros/s/AKfycbz_Gt_wfVi6uYKSraGA8A7D8tG9rXz5SWuaQORUOEYGUlDRhYDZL-ZQknmtN8-izPIE/exec';
     
     // This is the correct ID from your LAUNCH_PRODUCT_VAULT sheet.
     const targetToolkitId = 'BP-C5.1';
