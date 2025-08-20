@@ -1,11 +1,8 @@
-// --- Wait for the entire webpage to load before running any script ---
 window.addEventListener('DOMContentLoaded', () => {
-
-    // --- Part 1: Sketchfab Viewer Setup ---
     const iframe = document.getElementById('api-frame');
-    const modelUID = '37366957265e4918baec184625662062'; // The Car Model UID
+    const modelUID = '37366957265e4918baec184625662062';
     const client = new Sketchfab('1.12.1', iframe);
-    let sketchfabApi; 
+    let sketchfabApi;
 
     client.init(modelUID, {
         success: (api) => {
@@ -16,56 +13,43 @@ window.addEventListener('DOMContentLoaded', () => {
         error: () => console.error('Sketchfab API failed to initialize')
     });
 
-    // --- Part 2: Dynamic Content & Google Sheets Integration ---
-
-    // The live, golden URL is forged into the code.
     const aodAppsScriptUrl = 'https://script.google.com/macros/s/AKfycbzNZy03Jizd-BsXO29OwnBT7UrXyza4URqNKSjl2oQcwXjFW8fynRQ7dWPixhGoQuPZ/exec';
     
-    // THE CRUCIAL UPDATE: We are now requesting the new, correct Toolkit ID.
-    const targetToolkitId = 'C0.A.1';
+    // THE FINAL UPDATE: We are now asking for the correct ID from the LAUNCH_PRODUCT_VAULT
+    const targetToolkitId = 'BP-C5.1';
 
     const quizContainer = document.getElementById('quiz-container');
     const outputContainer = document.getElementById('smart-brick-output');
 
-    // --- Create the button with the new, correct text ---
     const loadButton = document.createElement('button');
-    loadButton.textContent = 'Load: Write a Letter Before Action'; // Updated Button Text
+    loadButton.textContent = 'Load The Will Challenge Blueprint'; // Correct button text
     loadButton.className = 'load-toolkit-btn';
     quizContainer.appendChild(loadButton);
 
-    // --- The main function that runs when the button is clicked ---
     async function handleLoadToolkitClick() {
         console.log(`Button clicked. Fetching data for: ${targetToolkitId}`);
         outputContainer.innerHTML = '<p>Loading toolkit... Please wait.</p>';
         loadButton.disabled = true;
 
         try {
-            // Construct the request URL with the correct toolkitId
             const requestUrl = `${aodAppsScriptUrl}?toolkitId=${targetToolkitId}`;
-
             const response = await fetch(requestUrl);
-
-            if (!response.ok) {
-                throw new Error(`Network response was not ok: ${response.statusText}`);
-            }
-
+            if (!response.ok) throw new Error(`Network response was not ok: ${response.statusText}`);
+            
             const data = await response.json();
 
             if (data.status === 'success') {
-                outputContainer.innerHTML = ''; // Clear the "loading" message
+                outputContainer.innerHTML = ''; // Clear loading message
 
-                data.bricks.forEach(brick => {
-                    const brickElement = document.createElement('div');
-                    brickElement.className = 'brick-content';
-                    const brickTitle = document.createElement('h3');
-                    brickTitle.textContent = brick.id; // Display the Module ID
-                    const brickText = document.createElement('p');
-                    brickText.textContent = brick.text; // The actual content
-
-                    brickElement.appendChild(brickTitle);
-                    brickElement.appendChild(brickText);
-                    outputContainer.appendChild(brickElement);
-                });
+                // The Librarian sends one giant "brick", which is the whole toolkit.
+                const finishedToolkit = data.bricks[0]; 
+                
+                const toolkitText = document.createElement('pre'); // Use <pre> for formatting
+                toolkitText.style.whiteSpace = 'pre-wrap'; // Allow text to wrap
+                toolkitText.style.fontFamily = 'inherit'; // Use the page's font
+                toolkitText.textContent = finishedToolkit.text;
+                
+                outputContainer.appendChild(toolkitText);
 
             } else {
                 throw new Error(data.message || 'The Apps Script returned an error.');
