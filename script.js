@@ -15,14 +15,14 @@ window.addEventListener('DOMContentLoaded', () => {
 
     const aodAppsScriptUrl = 'https://script.google.com/macros/s/AKfycbzNZy03Jizd-BsXO29OwnBT7UrXyza4URqNKSjl2oQcwXjFW8fynRQ7dWPixhGoQuPZ/exec';
     
-    // THE FINAL UPDATE: We are now asking for the correct ID from the LAUNCH_PRODUCT_VAULT
-    const targetToolkitId = 'BP-C5.1';
+    // THE FINAL, CORRECTED LINE: We are now asking for the correct ID from the LAUNCH_PRODUCT_VAULT
+    const targetToolkitId = 'C5.B.1';
 
     const quizContainer = document.getElementById('quiz-container');
     const outputContainer = document.getElementById('smart-brick-output');
 
     const loadButton = document.createElement('button');
-    loadButton.textContent = 'Load The Will Challenge Blueprint'; // Correct button text
+    loadButton.textContent = 'Load The Will Challenge Blueprint';
     loadButton.className = 'load-toolkit-btn';
     quizContainer.appendChild(loadButton);
 
@@ -39,14 +39,13 @@ window.addEventListener('DOMContentLoaded', () => {
             const data = await response.json();
 
             if (data.status === 'success') {
-                outputContainer.innerHTML = ''; // Clear loading message
+                outputContainer.innerHTML = ''; 
 
-                // The Librarian sends one giant "brick", which is the whole toolkit.
                 const finishedToolkit = data.bricks[0]; 
                 
-                const toolkitText = document.createElement('pre'); // Use <pre> for formatting
-                toolkitText.style.whiteSpace = 'pre-wrap'; // Allow text to wrap
-                toolkitText.style.fontFamily = 'inherit'; // Use the page's font
+                const toolkitText = document.createElement('pre');
+                toolkitText.style.whiteSpace = 'pre-wrap';
+                toolkitText.style.fontFamily = 'inherit';
                 toolkitText.textContent = finishedToolkit.text;
                 
                 outputContainer.appendChild(toolkitText);
