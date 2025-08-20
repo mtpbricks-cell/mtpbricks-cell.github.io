@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>B-and-Ai-D™ Command Center Prototype</title>
+    <!-- This line connects our CSS file for styling -->
+    <link rel="stylesheet" href="style.css">
+    <!-- This line includes the official Sketchfab API script -->
+    <script type="text/javascript" src="https://static.sketchfab.com/api/sketchfab-viewer-1.12.1.js"></script>
+</head>
+<body>
+
+    <!-- This is the main container that will hold all four panes -->
+    <div id="command-center">
+
+        <!-- Pane 1: The Dashboard (The Map) -->
+        <div id="pane-dashboard" class="pane">
+            <h2>Dashboard</h2>
+            <p>Case Overview</p>
+            <div id="my-forges">
+                <h3>My Forges</h3>
+                <!-- Saved toolkits will appear here later -->
+            </div>
+        </div>
+
+        <!-- Pane 2: The Guided Form (The "Digital IHT400") -->
+        <div id="pane-form" class="pane">
+            <h2>Guided Form</h2>
+            <p>Answer the questions below to build your toolkit.</p>
+            <div id="quiz-container">
+                <!-- Our "Load Toolkit" button will be created here by our script.js file -->
+            </div>
+        </div>
+
+        <!-- Pane 3: The Interactive Blueprint (The "Magician's Stage") -->
+        <div id="pane-blueprint" class="pane">
+            <h2>Interactive Blueprint</h2>
+            <!-- The Sketchfab 3D model will be loaded into this iframe -->
+            <iframe src="" id="api-frame" allow="autoplay; fullscreen; xr-spatial-tracking"></iframe>
+        </div>
+
+        <!-- Pane 4: The Bill of Materials & Help (The "Contextual Oracle") -->
+        <div id="pane-oracle" class="pane">
+            <h2>Contextual Oracle</h2>
+            <div id="smart-brick-output">
+                <!-- The text from your Google Sheet will appear here -->
+                <p>Your toolkit content will be displayed here as you build...</p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- This line connects our JavaScript file for all the interactive magic -->
+    <script src="script.js"></script>
+
+</body>
+</html>

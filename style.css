@@ -1,0 +1,96 @@
+/* --- Basic Setup & Body Styling --- */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    margin: 0;
+    background-color: #f0f2f5;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* --- The Main Command Center Grid --- */
+#command-center {
+    display: grid;
+    /* This creates our 2x2 grid layout */
+    grid-template-columns: 1fr 2fr; /* The right column is twice as wide as the left */
+    grid-template-rows: 1fr 1fr;
+    width: 95vw;
+    height: 95vh;
+    gap: 15px; /* The space between the panes */
+    padding: 15px;
+}
+
+/* --- General Styling for All Panes --- */
+.pane {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    overflow-y: auto; /* Adds a scrollbar if content is too long */
+}
+
+.pane h2 {
+    margin-top: 0;
+    color: #1caad9; /* B-and-Ai-D blue for headers */
+    border-bottom: 2px solid #e9e9e9;
+    padding-bottom: 10px;
+}
+
+/* --- Specific Pane Layout using Grid Areas --- */
+/* This is how we assign each pane to its spot in the grid */
+#pane-dashboard {
+    grid-area: 1 / 1 / 2 / 2; /* Row 1, Column 1 */
+}
+#pane-form {
+    grid-area: 2 / 1 / 3 / 2; /* Row 2, Column 1 */
+}
+#pane-blueprint {
+    grid-area: 1 / 2 / 2 / 3; /* Row 1, Column 2 */
+}
+#pane-oracle {
+    grid-area: 2 / 2 / 3 / 3; /* Row 2, Column 2 */
+}
+
+
+/* --- Styling for the 3D Model Iframe --- */
+#api-frame {
+    width: 100%;
+    height: 85%; /* Fill most of the blueprint pane */
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+/* --- Styling for the Button (will be created by script.js) --- */
+.load-toolkit-btn {
+    display: block;
+    width: 100%;
+    padding: 15px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #28a745; /* A nice "go" green */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.load-toolkit-btn:hover {
+    background-color: #218838; /* A darker green on hover */
+}
+.load-toolkit-btn:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+
+/* --- Styling for the Smart Brick Output Area --- */
+#smart-brick-output {
+    line-height: 1.6;
+}
+
+#smart-brick-output h3 {
+    color: #1caad9;
+}
