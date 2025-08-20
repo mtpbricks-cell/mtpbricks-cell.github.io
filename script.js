@@ -2,17 +2,14 @@ window.addEventListener('DOMContentLoaded', () => {
     const iframe = document.getElementById('api-frame');
     const modelUID = '37366957265e4918baec184625662062';
     const client = new Sketchfab('1.12.1', iframe);
-    let sketchfabApi;
 
     client.init(modelUID, {
         success: (api) => { api.start(); },
         error: () => console.error('Sketchfab API failed to initialize')
     });
 
-    // This is the new, correct, and verified URL for your "Copy of..." script.
-    const aodAppsScriptUrl = 'https://script.google.com/macros/s/AKfycbz_Gt_wfVi6uYKSraGA8A7D8tG9rXz5SWuaQORUOEYGUlDRhYDZL-ZQknmtN8-izPIE/exec';
+    const aodAppsScriptUrl = 'https://script.google.com/macros/s/AKfycbxbaAPZ5yyGXyogUhn8OuIejDZFz-bNnQ0oqMsy4ukGXt6FffWYzpKcqXwAMLYRyKWp/exec';
     
-    // This is the correct ID from your LAUNCH_PRODUCT_VAULT sheet.
     const targetToolkitId = 'BP-C5.1';
 
     const quizContainer = document.getElementById('quiz-container');
@@ -24,24 +21,28 @@ window.addEventListener('DOMContentLoaded', () => {
     quizContainer.appendChild(loadButton);
 
     async function handleLoadToolkitClick() {
-        outputContainer.innerHTML = '<p>Loading toolkit... Please wait.</p>';
+        outputContainer.innerHTML = '<p>Loading toolkit...</p>';
         loadButton.disabled = true;
 
         try {
             const requestUrl = `${aodAppsScriptUrl}?toolkitId=${targetToolkitId}`;
             const response = await fetch(requestUrl);
-            if (!response.ok) throw new Error(`Network response error. Status: ${response.status}`);
+            if (!response.ok) throw new Error(`Network response error`);
             
             const data = await response.json();
 
             if (data.status === 'success') {
                 outputContainer.innerHTML = ''; 
-                const finishedToolkit = data.bricks[0]; 
-                const toolkitText = document.createElement('pre');
-                toolkitText.style.whiteSpace = 'pre-wrap';
-                toolkitText.style.fontFamily = 'inherit';
-                toolkitText.textContent = finishedToolkit.text;
-                outputContainer.appendChild(toolkitText);
+                data.bricks.forEach(brick => {
+                    const brickElement = document.createElement('div');
+                    const brickTitle = document.createElement('h3');
+                    brickTitle.textContent = brick.id;
+                    const brickText = document.createElement('p');
+                    brickText.textContent = brick.text;
+                    brickElement.appendChild(brickTitle);
+                    brickElement.appendChild(brickText);
+                    outputContainer.appendChild(brickElement);
+                });
             } else {
                 throw new Error(data.message);
             }
